@@ -15,7 +15,7 @@ fake_db = [
 
 #Criando novo método
 @app.get('/posts')
-def read_posts():
+def read_posts(skip: int = 0, limit: int = len(fake_db)):
     return fake_db
 
 
