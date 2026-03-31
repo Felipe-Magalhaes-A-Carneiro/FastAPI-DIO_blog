@@ -6,17 +6,17 @@ app = FastAPI()
 
 # Criando uma simulação de data base
 fake_db = [
-    {'title': 'Criando uma aplicação com Django' , 'date': datetime.now(UTC)},
-    {'title': 'Internacionalizando uma app FastAPI' , 'date': datetime.now(UTC)},
-    {'title': 'Internacionalizando uma app Flask' , 'date': datetime.now(UTC)},
-    {'title': 'Internacionalizando uma app Starlett' , 'date': datetime.now(UTC)}
+    {'title': 'Criando uma aplicação com Django' , 'date': datetime.now(UTC), "published": True},
+    {'title': 'Internacionalizando uma app FastAPI' , 'date': datetime.now(UTC), "published": True},
+    {'title': 'Internacionalizando uma app Flask' , 'date': datetime.now(UTC), "published": True},
+    {'title': 'Internacionalizando uma app Starlett' , 'date': datetime.now(UTC), "published": True}
 
 ]
 
 #Criando novo método
 @app.get('/posts')
-def read_posts(skip: int = 0, limit: int = len(fake_db)):
-    return fake_db
+def read_posts(published: bool, skip: int = 0, limit: int = len(fake_db)):
+    return [post for post in fake_db[skip: skip + limit] if post["published"] is published]
 
 
 # Criando rota
