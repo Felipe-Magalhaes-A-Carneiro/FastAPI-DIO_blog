@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from pydantic import BaseModel
 
 from datetime import datetime, UTC
@@ -19,10 +19,11 @@ class Post(BaseModel):
     title: str
     date: datetime = datetime.now(UTC)
     published: bool = False
+    author: str
 
 
 #Criando novo método
-@app.post('/posts/')
+@app.post('/posts/', status_code= status.HTTP_201_CREATED)
 def create_post(post: Post):
 
     return post
