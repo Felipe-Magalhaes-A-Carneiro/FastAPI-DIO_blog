@@ -25,7 +25,7 @@ class Post(BaseModel):
 #Criando novo método
 @app.post('/posts/', status_code= status.HTTP_201_CREATED)
 def create_post(post: Post):
-
+    fake_db.append(post.model_dump())
     return post
 
 
