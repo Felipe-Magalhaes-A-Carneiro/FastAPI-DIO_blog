@@ -1,4 +1,5 @@
-from fastapi import FastAPI, status
+from fastapi import Cookie, FastAPI, status
+from typing import Annotated
 from pydantic import BaseModel
 
 from datetime import datetime, UTC
@@ -14,7 +15,7 @@ fake_db = [
     {'title': 'Internacionalizando uma app Starlett' , 'date': datetime.now(UTC), "published": False}
 ]
 
-#Criando mapeamento
+
 class Post(BaseModel):
     title: str
     date: datetime = datetime.now(UTC)
@@ -22,17 +23,17 @@ class Post(BaseModel):
     author: str
 
 
-#Criando novo método
+
 @app.post('/posts/', status_code= status.HTTP_201_CREATED)
 def create_post(post: Post):
     fake_db.append(post.model_dump())
     return post
 
-
+# implementando cookies
 @app.get('/posts/')
-def read_posts(published: bool, limit: int, skip: int = 0):
-    # def read_posts(published: bool, skip: int = 0, limit: int = len(fake_db)):
-    #return [post for post in fake_db[skip: skip + limit] if post["published"] is published]
+def read_posts(published: bool, limit: int, skip: int = 0, ads_id: Annotated[str | None, Cookie()] = None):
+    print(f"Cookie: {ads_id}")
+
     posts = []
     for post in fake_db:
         if len(posts) == limit:
