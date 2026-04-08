@@ -32,15 +32,11 @@ def create_post(post: Post):
 # implementando cookies
 @app.get('/posts/')
 def read_posts(published: bool, limit: int, skip: int = 0, ads_id: Annotated[str | None, Cookie()] = None):
-    print(f"Cookie: {ads_id}")
+    print(f"Cookie: '{ads_id}'")
 
-    posts = []
-    for post in fake_db:
-        if len(posts) == limit:
-            break
-        
-        if post["published"] is published:
-            posts.append(post)
+    filtered = [p for p in fake_db if p["published"] == published]
+    
+    posts = filtered[skip: skip + limit]  
 
     return posts
 

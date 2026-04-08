@@ -1,0 +1,8 @@
+###
+GET http://127.0.0.1:8000/posts/?published=true&limit=10
+Cookie: ads_id=teste123
+
+###
+GET http://127.0.0.1:8000/posts/?published=true&limit=10
+ads_id: teste123
+user_id: carneiro123
