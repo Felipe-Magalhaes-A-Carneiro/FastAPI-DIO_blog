@@ -1,4 +1,4 @@
-from fastapi import Response, Cookie, FastAPI, status
+from fastapi import Response, Cookie, Header, FastAPI, status
 from typing import Annotated
 from pydantic import BaseModel
 
@@ -29,14 +29,23 @@ def create_post(post: Post):
     fake_db.append(post.model_dump())
     return post
 
-# implementando cookies
 @app.get('/posts/')
-def read_posts(response: Response, published: bool, limit: int, skip: int = 0, ads_id: Annotated[str | None, Cookie()] = None):
-    # lendo um cookie (é o que geralmente mais fazemos):
-    response.set_cookie(key= 'user_felipe', value= 'felipe.arq@inlook.com')
+def read_posts(
+    response: Response, 
+    published: bool, 
+    limit: int, 
+    skip: int = 0, 
+    ads_id: Annotated[str | None, Cookie()] = None,
+    # implementando o header 
+    user_agent: Annotated[str | None, Header()] = None
+    
+    ):
 
-    # definindo um cookie:
+    response.set_cookie(key= 'user_felipe', value= 'felipe.arq@inlook.com')
     print(f"Cookie: '{ads_id}'")
+
+    # definindo um header:
+    print(f"User-agent: '{user_agent}'")
 
     filtered = [p for p in fake_db if p["published"] == published]
     posts = filtered[skip: skip + limit]  
