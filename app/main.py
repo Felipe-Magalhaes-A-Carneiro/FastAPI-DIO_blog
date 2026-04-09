@@ -22,6 +22,16 @@ class Post(BaseModel):
     published: bool = False
     author: str
 
+# implementando um teste:
+class Foo(BaseModel): 
+    bar: str
+    message: str
+
+# criando um endpoing teste
+@app.get('/foobar/', response_model= Foo)
+def foobar() -> Foo:
+    return {'bar': "foo", "message": "Hello, Word"}
+
 
 
 @app.post('/posts/', status_code= status.HTTP_201_CREATED)
@@ -36,15 +46,12 @@ def read_posts(
     limit: int, 
     skip: int = 0, 
     ads_id: Annotated[str | None, Cookie()] = None,
-    # implementando o header 
     user_agent: Annotated[str | None, Header()] = None
     
     ):
 
     response.set_cookie(key= 'user_felipe', value= 'felipe.arq@inlook.com')
     print(f"Cookie: '{ads_id}'")
-
-    # definindo um header:
     print(f"User-agent: '{user_agent}'")
 
     filtered = [p for p in fake_db if p["published"] == published]
