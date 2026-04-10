@@ -1,10 +1,12 @@
 from datetime import datetime, UTC
 from typing import Annotated
 
-from fastapi import Response, Cookie, Header, status
+from fastapi import Response, Cookie, Header, status, APIRouter
 
 from schemas.post import PostIn
 from views.post import PostOut
+
+router = APIRouter(prefix= "/posts")
 
 fake_db = [
     {'title': 'Criando uma aplicação com Django' , 'date': datetime.now(UTC), "published": True},
@@ -13,12 +15,12 @@ fake_db = [
     {'title': 'Internacionalizando uma app Starlett' , 'date': datetime.now(UTC), "published": False}
 ]
 
-@app.post('/posts/', status_code= status.HTTP_201_CREATED, response_model = PostOut)
+@router.post('/', status_code= status.HTTP_201_CREATED, response_model = PostOut)
 def create_post(post: PostIn):
     fake_db.append(post.model_dump())
     return post
 
-@app.get('/posts/', response_model = list[PostOut])
+@router.get('/', response_model = list[PostOut])
 def read_posts(
     response: Response, 
     published: bool, 
@@ -38,7 +40,7 @@ def read_posts(
 
     return posts
 
-@app.get('/posts/{framework}', response_model = PostOut)  
+@router.get('/{framework}', response_model = PostOut)  
 def read_framework_posts(framework: str): 
     return {
         "posts": [
