@@ -1,52 +1,16 @@
-from datetime import datetime, UTC
-from typing import Annotated
-
-from fastapi import Response, Cookie, Header, status, APIRouter
+from fastapi import Response, status, APIRouter
 
 from schemas.post import PostIn
 from views.post import PostOut
 
 router = APIRouter(prefix= "/posts")
 
-fake_db = [
-    {'title': 'Criando uma aplicação com Django' , 'date': datetime.now(UTC), "published": True},
-    {'title': 'Internacionalizando uma app FastAPI' , 'date': datetime.now(UTC), "published": True},
-    {'title': 'Internacionalizando uma app Flask' , 'date': datetime.now(UTC), "published": True},
-    {'title': 'Internacionalizando uma app Starlett' , 'date': datetime.now(UTC), "published": False}
-]
-
 @router.post('/', status_code= status.HTTP_201_CREATED, response_model = PostOut)
 def create_post(post: PostIn):
-    fake_db.append(post.model_dump())
+    # fake_db.append(post.model_dump())
     return post
 
 @router.get('/', response_model = list[PostOut])
-def read_posts(
-    response: Response, 
-    published: bool, 
-    limit: int, 
-    skip: int = 0, 
-    ads_id: Annotated[str | None, Cookie()] = None,
-    user_agent: Annotated[str | None, Header()] = None
-    
-    ):
+def read_posts(response: Response, published: bool, limit: int, skip: int = 0, ):
 
-    response.set_cookie(key= 'user_felipe', value= 'felipe.arq@inlook.com')
-    print(f"Cookie: '{ads_id}'")
-    print(f"User-agent: '{user_agent}'")
-
-    filtered = [p for p in fake_db if p["published"] == published]
-    posts = filtered[skip: skip + limit]  
-
-    return posts
-
-@router.get('/{framework}', response_model = PostOut)  
-def read_framework_posts(framework: str): 
-    return {
-        "posts": [
-                {'title': f'Criando uma aplicação com {framework}' , 'date': datetime.now(UTC)},
-                
-                {'title': f'Internacionalizando uma app {framework}' , 'date': datetime.now(UTC)}
-            
-            ]
-    }
+    return []
