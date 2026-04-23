@@ -1,28 +1,25 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
 
+import databases # importacao necessaria
+from fastapi import FastAPI
+import sqlalchemy # importacao necessaria
 from controllers import post
 
-# instanciando a classe FastAPI
-app = FastAPI()
+DATABASE_URL = 'sqlite:///./blog.db'
+
+# cria database
+database = databases.Database(DATABASE_URL)
+# instanciando a classe SQLalchemmy
+metadata = sqlalchemy.MetaData()
+engine = sqlalchemy.create_engine(DATABASE_URL, connect_args = {"check_same_thread": False})
+# utiliza a engine:
+metadata.create_all(engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await database.connect()
+    yield
+    await database.disconnect()
+
+app = FastAPI(lifespan= None)
 app.include_router(post.router)
-
-
-
-
-
-
-
-
-# # implementando um teste:
-# class Foo(BaseModel): 
-#     bar: str
-#     message: str
-
-# # criando um endpoing teste
-# @app.get('/foobar/', response_model= Foo)
-# def foobar() -> Foo:
-#     return {'bar': "foo", "message": "Hello, Word"}
-
-
-
-
