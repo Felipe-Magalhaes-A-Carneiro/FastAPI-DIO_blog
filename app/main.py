@@ -24,5 +24,5 @@ async def lifespan(app: FastAPI):
     yield
     await database.disconnect()
 
-app = FastAPI(lifespan= None)
+app = FastAPI(lifespan= lifespan)
 app.include_router(post.router)
