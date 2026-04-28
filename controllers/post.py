@@ -11,7 +11,7 @@ router = APIRouter(prefix= "/posts")
 async def read_posts(published: bool, limit: int, skip: int = 0, ):
     # criando a querry
     querry = posts.select()
-    return database.fetch_all(querry)
+    return await database.fetch_all(querry)
 
 @router.post('/', status_code= status.HTTP_201_CREATED, response_model = PostOut)
 async def create_post(post: PostIn):
