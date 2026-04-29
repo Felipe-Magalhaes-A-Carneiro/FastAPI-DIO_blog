@@ -1,6 +1,6 @@
 # 🚀 FASTAPI BLOG API (DIO PROJECT)
 
-Descrição
+## Descrição
 Este projeto consiste no desenvolvimento de uma API REST para um sistema de blog, utilizando o framework FastAPI. O objetivo é aplicar boas práticas de desenvolvimento back-end, organização de código e construção de aplicações modernas e performáticas.
 
 O projeto foi desenvolvido como parte da trilha da Digital Innovation One (DIO), com foco em APIs, arquitetura de software e manipulação de dados.
