@@ -25,7 +25,7 @@ async def create_post(post: PostIn):
     return {**post.model_dump(), "id": last_id}
 
 # serviço de leitura
-@router.get("/{id}", response_model = PostOut)
+@router.get("/{id}", response_model = list[PostOut])
 async def read_post(id: int):
     return await service.read(id)
 
