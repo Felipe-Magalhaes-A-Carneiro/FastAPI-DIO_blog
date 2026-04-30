@@ -10,6 +10,7 @@ router = APIRouter(prefix= "/posts")
 
 service = PostService()
 
+# serviço de READ ALL
 @router.get('/', response_model = list[PostOut])
 async def read_posts(published: bool, limit: int, skip: int = 0, ):
     # criando a querry
@@ -24,12 +25,17 @@ async def create_post(post: PostIn):
     last_id = await database.execute(command)
     return {**post.model_dump(), "id": last_id}
 
-# serviço de leitura
-@router.get("/{id}", response_model = list[PostOut])
+# serviço de READ ONE -  por id
+@router.get("/{id}", response_model=PostOut)
 async def read_post(id: int):
     return await service.read(id)
 
-# serviço de alteração
+# serviço de UPDATE
 @router.patch("/{id}", response_model= PostOut)
 async def update_post(id: int, post: PostUpdateIn):
     return await service.update(id = id, post = post)
+
+# serviço de DELETE
+@router.delete("/{id}", status_code= status.HTTP_204_NO_CONTENT, response_model = None)
+async def delete_post(id: int):
+    await service.delete(id)

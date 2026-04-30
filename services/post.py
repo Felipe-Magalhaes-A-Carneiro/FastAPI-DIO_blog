@@ -32,7 +32,7 @@ class PostService:
             raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail= "Post not found")
         
         data = post.model_dump(exclude_unset = True)
-        command = posts.update().where(posts.c.id == id). values(**data)
+        command = posts.update().where(posts.c.id == id).values(**data)
         await database.execute(command)
 
         return await self.__get_by_id(id)
@@ -51,7 +51,7 @@ class PostService:
     
     async def __get_by_id(self, id) -> Record:
         query = posts.select().where(posts.c.id == id)
-        result = await database.fetch_all(query)
+        result = await database.fetch_one(query)
         if not result:
             raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Post not found")
         return result
