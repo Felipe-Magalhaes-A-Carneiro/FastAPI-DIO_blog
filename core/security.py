@@ -41,7 +41,7 @@ def sign_jwt(user_id: int) -> JWTToken:
 
 async def decode_jwt(token: str) -> JWTToken | None:
     try:
-        decode_token = jwt.decode(token, SECRET, audience= "curso-fastapi", algorithms= ALGORITHM)
+        decode_token = jwt.decode(token, SECRET, audience= "curso-fastapi", algorithms= [ALGORITHM])
         return _token if _token.acess_token.exp >= time.time() else None
     except Exception:
         return None
