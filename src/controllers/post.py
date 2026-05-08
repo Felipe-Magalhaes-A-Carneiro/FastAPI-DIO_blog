@@ -1,11 +1,11 @@
 from fastapi import status, APIRouter, Depends # nova importação
 
-from app.database import database
-from schemas.post import PostIn, PostUpdateIn
-from core.security import login_required
-from services.post import PostService
-from views.post import PostOut
-from models.post import posts
+from src.app.database import database
+from src.schemas.post import PostIn, PostUpdateIn
+from src.core.security import login_required
+from src.services.post import PostService
+from src.views.post import PostOut
+from src.models.post import posts
 
 router = APIRouter(prefix= "/posts", dependencies=[Depends(login_required)])
 

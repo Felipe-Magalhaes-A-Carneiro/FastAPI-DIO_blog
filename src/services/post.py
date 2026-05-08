@@ -1,8 +1,8 @@
-from app.database import database
+from src.app.database import database
 from databases.interfaces import Record
 from fastapi import HTTPException, status
-from models.post import posts
-from schemas.post import PostIn, PostUpdateIn
+from src.models.post import posts
+from src.schemas.post import PostIn, PostUpdateIn
 
 
 class PostService:
