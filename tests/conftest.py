@@ -26,3 +26,20 @@ async def db(request):
     request.addfinalizer(teardown)
 
 
+# Segunda função - Retorna o http client
+@pytest_asyncio.fixture
+async def client(db):
+    from src.app.main import app
+
+    transport = ASGITransport(app = app)
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+
+    async with AsyncClient(base_url = "http://test", transport= transport, headers= headers) as client:
+        yield client
+
+
+
+# Terceira função - Facilita o acess_token
