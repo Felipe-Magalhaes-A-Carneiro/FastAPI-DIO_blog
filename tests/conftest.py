@@ -1,0 +1,28 @@
+import asyncio
+import os
+
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+
+os.environ.setdefault("DATABASE_URL", f"sqlite:///tests.db")
+
+
+# Primeira função - Retorna o banco de dados
+@pytest_asyncio.fixture
+async def db(request):
+    from src.app.database import database, engine, metadata
+    from src.models.post import posts
+
+    await database.connect()
+    metadata.create_all(engine)
+
+    def teardown():
+        async def _teardown():
+            await database.disconnect()
+            metadata.drop_all(engine)
+
+        asyncio.run(_teardown())
+
+    request.addfinalizer(teardown)
+
+

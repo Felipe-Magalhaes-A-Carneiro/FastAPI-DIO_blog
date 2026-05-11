@@ -1,7 +1,9 @@
+import os
+
 import databases 
 import sqlalchemy 
 
-DATABASE_URL = 'sqlite:///./blog.db'
+DATABASE_URL = os.getenv("DATABASE_URL",'sqlite:///./blog.db')
 
 # cria database
 database = databases.Database(DATABASE_URL)
