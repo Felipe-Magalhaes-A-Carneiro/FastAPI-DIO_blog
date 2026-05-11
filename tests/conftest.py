@@ -42,4 +42,7 @@ async def client(db):
 
 
 
-# Terceira função - Facilita o acess_token
+# Terceira função - Facilita o access_token
+async def access_token(client: AsyncClient):
+    response = await client.post("/auth/login", json={"user_id": 1})
+    return response.json()["access_token"]
