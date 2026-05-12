@@ -14,41 +14,41 @@ async def populate_posts(db):
     await service.create(PostIn(title= "post 3", content= "some content", published = False))
 
 
-async def test_read_posts_success(client: AsyncClient, access_token: str):
+async def test_update_posts_success(client: AsyncClient, access_token: str):
     # Given
     headers = {"Authorization": f"Bearer {access_token}"}
     post_id = 1
+    data = {"title": f"update title post {post_id}"}
 
     # When
-    response = await client.get(f"/posts/{post_id}", headers= headers)
+    response = await client.patch(f"/posts/{post_id}", json= data, headers= headers)
 
     # Then
     content = response.json()
 
     assert response.status_code == status.HTTP_200_OK
-    assert content["id"] == post_id
+    assert content["title"] == data["title"]
 
 
-async def test_read_posts_not_authenticated_fail(client: AsyncClient):
+async def test_update_post_not_authenticated_fail(client: AsyncClient):
     # Given
     post_id = 1
 
     # When
-    response = await client.get(f"/posts/{post_id}", headers= {})
+    response = await client.patch(f"/posts/{post_id}", headers={})
 
     # Then
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-async def test_read_posts_not_found_fail(client: AsyncClient, access_token: str):
+async def test_update_post_not_found_fail(client: AsyncClient, acess_token: str):
     # Given
-    headers = {"Authorization": f"Bearer {access_token}"}
+    headers = {"Authorization": f"Bearer {acess_token}"}
     post_id = 4
+    data = {"title": f"update title post {post_id}"}
 
     # When
-    response = await client.get(f"/posts/{post_id}", headers= headers)
+    response = await client.patch(f"/posts/{post_id}", json= data, headers= headers)
 
     # Then
-    content = response.json()
-
     assert response.status_code == status.HTTP_404_NOT_FOUND
