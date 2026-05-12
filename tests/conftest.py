@@ -4,14 +4,13 @@ import os
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
-os.environ.setdefault("DATABASE_URL", f"sqlite:///tests.db")
+os.environ.setdefault("DATABASE_URL", "sqlite:///tests.db")
 
 
-# Primeira função - Retorna o banco de dados
 @pytest_asyncio.fixture
 async def db(request):
-    from src.app.database import database, engine, metadata
-    from src.models.post import posts
+    from app.database import database, engine, metadata
+    from models.post import posts  # ✅ sem 'src.'
 
     await database.connect()
     metadata.create_all(engine)
@@ -26,23 +25,20 @@ async def db(request):
     request.addfinalizer(teardown)
 
 
-# Segunda função - Retorna o http client
 @pytest_asyncio.fixture
 async def client(db):
-    from src.app.main import app
+    from app.main import app  # ✅ sem 'src.'
 
-    transport = ASGITransport(app = app)
+    transport = ASGITransport(app=app)
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
     }
 
-    async with AsyncClient(base_url = "http://test", transport= transport, headers= headers) as client:
+    async with AsyncClient(base_url="http://test", transport=transport, headers=headers) as client:
         yield client
 
 
-
-# Terceira função - Facilita o access_token
 async def access_token(client: AsyncClient):
     response = await client.post("/auth/login", json={"user_id": 1})
     return response.json()["access_token"]
